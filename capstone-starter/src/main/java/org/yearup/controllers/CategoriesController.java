@@ -5,6 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yearup.data.CategoryDao;
 import org.yearup.data.ProductDao;
+import org.yearup.data.mysql.MySqlCategoryDao;
 import org.yearup.models.Category;
 import org.yearup.models.Product;
 
@@ -36,7 +37,7 @@ public class CategoriesController
     public List<Category> getAll()
     {
         // find and return all categories
-        return null;
+        return categoryDao.getAllCategories();
     }
 
     // add the appropriate annotation for a get action
