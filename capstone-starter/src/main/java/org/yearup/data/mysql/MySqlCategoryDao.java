@@ -22,6 +22,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     @Override
     public List<Category> getAllCategories() {
         // get all categories
+        // instantiate a list and create a connection statement and result set to get all categories
         List<Category> categories = new ArrayList<>();
         String sql = "SELECT * FROM categories";
 
@@ -43,6 +44,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     @Override
     public Category getById(int categoryId) {
         // get category by id
+        // Select all data specifying to do it by id and returning the results through the database
         String query = "SELECT * FROM categories WHERE category_id = ?";
 
         try(Connection connection = super.getConnection();
@@ -64,6 +66,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     @Override
     public Category create(Category category) {
         // create a new category
+        // create a new category and return the generated keys
         String query = "INSERT INTO categories (name, description) VALUES (?, ?)";
 
         try(Connection connection = super.getConnection();
@@ -89,6 +92,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     @Override
     public void update(int categoryId, Category category) {
         // update category
+        // update a category specified by its ID
         String sql = "UPDATE categories SET name = ?, description = ? WHERE category_id = ?";
 
         try (Connection connection = super.getConnection();
@@ -106,7 +110,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
 
     @Override
     public void delete(int categoryId) {
-        // delete category
+        // delete category by its ID
         String sql = "DELETE FROM categories WHERE category_id = ?";
 
         try(Connection connection = super.getConnection();
