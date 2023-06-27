@@ -52,13 +52,14 @@ public class ProductsController
 
             if(product == null)
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-
             return product;
         }
         catch(Exception ex)
         {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
         }
+
+
     }
 
     @PostMapping()
