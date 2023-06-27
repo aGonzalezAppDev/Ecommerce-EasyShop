@@ -13,7 +13,6 @@ import java.util.List;
 @Component
 public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
 {
-    private DataSource dataSource;
     @Autowired
     public MySqlCategoryDao(DataSource dataSource)
     {
@@ -26,7 +25,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
         List<Category> categories = new ArrayList<>();
         String sql = "SELECT * FROM categories";
 
-        try(Connection connection = dataSource.getConnection();
+        try(Connection connection = super.getConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql)) {
 
@@ -35,7 +34,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
                 categories.add(category);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         return categories;
@@ -46,7 +45,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
         // get category by id
         String query = "SELECT * FROM categories WHERE category_id = ?";
 
-        try(Connection connection = dataSource.getConnection();
+        try(Connection connection = super.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setInt(1,categoryId);
@@ -57,7 +56,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return null;
     }
@@ -67,7 +66,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
         // create a new category
         String query = "INSERT INTO categories (name, description) VALUES (?, ?)";
 
-        try(Connection connection = dataSource.getConnection();
+        try(Connection connection = super.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setString(1, category.getName());
@@ -78,12 +77,13 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
                 if(generatedKeys.next()) {
                     int generatedId = generatedKeys.getInt(1);
                     category.setCategoryId(generatedId);
+                    return getById(generatedId);
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return category;
+        return null;
     }
 
     @Override
@@ -91,7 +91,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
         // update category
         String sql = "UPDATE categories SET name = ?, description = ? WHERE category_id = ?";
 
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = super.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, category.getName());
@@ -100,7 +100,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
             ps.executeUpdate();
 
         }catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -109,14 +109,14 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
         // delete category
         String sql = "DELETE FROM categories WHERE category_id = ?";
 
-        try(Connection connection = dataSource.getConnection();
+        try(Connection connection = super.getConnection();
             PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setInt(1,categoryId);
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
