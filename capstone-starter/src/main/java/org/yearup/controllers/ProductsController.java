@@ -82,7 +82,7 @@ public class ProductsController
     {
         try
         {
-            // bug #2
+            // bug #2 switched the function being used so that it wasn't creating duplicates
             productDao.update(id,product);
         }
         catch(Exception ex)
