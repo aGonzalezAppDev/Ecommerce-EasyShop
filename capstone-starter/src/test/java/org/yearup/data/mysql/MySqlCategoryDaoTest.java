@@ -11,6 +11,7 @@ class MySqlCategoryDaoTest extends BaseDaoTestClass {
 
     private MySqlCategoryDao dao;
 
+    // injecting
     @BeforeEach
     public void setup() {
         dao = new MySqlCategoryDao(dataSource);
@@ -35,6 +36,8 @@ class MySqlCategoryDaoTest extends BaseDaoTestClass {
         assertEquals(expected.getName(), actual.getName(), "Because I tried to get the first category from the database.");
 
     }
+
+
 
 
 
